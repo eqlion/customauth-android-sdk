@@ -67,4 +67,8 @@ public class SubVerifierDetails {
         allowedBrowsers = val;
         return this;
     }
+
+    public String getJwtToken() {
+        return jwtParams.getIdToken();
+    }
 }

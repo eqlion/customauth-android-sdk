@@ -68,8 +68,15 @@ public class CustomAuth {
     public CompletableFuture<TorusLoginResponse> triggerLogin(SubVerifierDetails subVerifierDetails) {
         ILoginHandler handler = HandlerFactory.createHandler(new CreateHandlerParams(subVerifierDetails.getClientId(), subVerifierDetails.getVerifier(),
                 this.customAuthArgs.getRedirectUri(), subVerifierDetails.getTypeOfLogin(), this.customAuthArgs.getBrowserRedirectUri(), subVerifierDetails.getJwtParams()));
-        return handler.handleLoginWindow(context, subVerifierDetails.getIsNewActivity(), subVerifierDetails.getPreferCustomTabs(), subVerifierDetails.getAllowedBrowsers())
-                .thenComposeAsync(loginWindowResponse -> handler.getUserInfo(loginWindowResponse).thenApply((userInfo) -> Pair.create(userInfo, loginWindowResponse)))
+        LoginWindowResponse initialLoginWindowResponse = new LoginWindowResponse();
+
+        String token = subVerifierDetails.getJwtToken();
+
+        initialLoginWindowResponse.setIdToken(token);
+
+//        return handler.handleLoginWindow(context, subVerifierDetails.getIsNewActivity(), subVerifierDetails.getPreferCustomTabs(), subVerifierDetails.getAllowedBrowsers())
+//                .thenComposeAsync(loginWindowResponse -> handler.getUserInfo(loginWindowResponse).thenApply((userInfo) -> Pair.create(userInfo, loginWindowResponse)))
+        return handler.getUserInfo(initialLoginWindowResponse).thenApply((userInfo) -> Pair.create(userInfo, initialLoginWindowResponse))
                 .thenComposeAsync(pair -> {
                     TorusVerifierResponse userInfo = pair.first;
                     LoginWindowResponse response = pair.second;

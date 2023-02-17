@@ -28,6 +28,8 @@ public class Auth0ClientOptions {
     private String response_type;
     private String nonce;
 
+    private String id_token;
+
     private Auth0ClientOptions(Auth0ClientOptionsBuilder builder) {
         this.domain = builder.domain;
         this.client_id = builder.client_id;
@@ -45,6 +47,7 @@ public class Auth0ClientOptions {
         this.audience = builder.audience;
         this.connection = builder.connection;
         this.additionalParams = builder.additionalParams;
+        this.id_token = builder.id_token;
     }
 
     public String getState() {
@@ -135,6 +138,8 @@ public class Auth0ClientOptions {
         return additionalParams;
     }
 
+    public String getIdToken() { return id_token; }
+
 
     public Auth0ClientOptions merge(Auth0ClientOptions options) {
         this.domain = Helpers.mergeValue(this.domain, options.getDomain());
@@ -175,6 +180,8 @@ public class Auth0ClientOptions {
         private String audience;
         private String connection;
         private HashMap<String, String> additionalParams = new HashMap<>();
+
+        private String id_token;
 
         public Auth0ClientOptionsBuilder(String domain) {
             this.domain = domain;
@@ -252,6 +259,11 @@ public class Auth0ClientOptions {
 
         public Auth0ClientOptionsBuilder setAdditionalParams(HashMap<String, String> additionalParams) {
             this.additionalParams = additionalParams;
+            return this;
+        }
+
+        public Auth0ClientOptionsBuilder setIdToken(String id_token) {
+            this.id_token = id_token;
             return this;
         }
 
